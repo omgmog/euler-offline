@@ -16,12 +16,13 @@ function pad(n, width, z) {
 
 function getProblem(id) {
   id = pad(id, problemsCount.toString().length);
+  var url = 'https://projecteuler.net/problem=' + id;
 
   request.post(
     'http://www.jamapi.xyz',
     {
       form: {
-        url: 'https://projecteuler.net/problem=' + id,
+        url: url,
         json_data: '{"title": "h2", "problem": ".problem_content"}'
       }
     },
@@ -32,7 +33,8 @@ function getProblem(id) {
         }
         var parsed = JSON.parse(body);
         var filename = dir + 'problem-'+id+'.js';
-        var content = '/*\n' + parsed.title + '\n' + parsed.problem + '*/\n\n';
+        var content = '/*\n' + parsed.title + '\n' + parsed.problem + '\n\nMore info: '+ url +'\n*/\n\n';
+
         fs.writeFile(filename, content, function (err) {
           if (err) return console.log(err);
           console.log('Wrote ', filename);
